@@ -21,7 +21,7 @@ pipeline
                 echo 'Copy wheel artifact from Jenkins build'
         
                 copyArtifacts(
-                    projectName: 'flask-example',
+                    projectName: 'Flask CI Pipeline',
                     filter: 'dist/*.whl',
                     target: '.',
                     selector: [$class: 'StatusBuildSelector', stable: false]
