@@ -65,7 +65,7 @@ pipeline
             {
                 echo 'Running REST integration tests'
                 sh """
-                    ./${VENV_DIR}/bin/python tests/requests_test_json.py
+                    ./${VENV_DIR}/bin/python tests/book_service_test.py
                 """
             }
         }
