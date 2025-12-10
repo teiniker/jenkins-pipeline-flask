@@ -1,17 +1,23 @@
-pipeline {
-    agent { label "raspi" }
+pipeline 
+{
+    agent any
 
-    environment {
-        VENV_DIR = "venv"
+    environment 
+    {
+        VENV_DIR = ".venv"
+        WHEEL_NAME = "book_service-0.1.0-py3-none-any.whl"
+
         FLASK_APP_MODULE = "src.book_service.book_service"
         FLASK_PORT = "9090"  
-        WHEEL_NAME = "book_service-0.1.0-py3-none-any.whl"
     }
 
-    stages {
+    stages 
+    {
 
-        stage('download wheel') {
-            steps {
+        stage('download wheel') 
+        {
+            steps 
+            {
                 echo 'Copy wheel artifact from Jenkins build'
         
                 copyArtifacts(
@@ -25,22 +31,22 @@ pipeline {
             }
         }
 
-
-
-
-        stage('install wheel') {
+        stage('install wheel') 
+        {
             steps {
                 echo 'Install wheel into virtual environment'
                 sh """
-                    python3 -m venv ${VENV_DIR}
-                    ./${VENV_DIR}/bin/pip install --upgrade pip requests pytest
+                    python -m venv ${VENV_DIR}
+                    ./${VENV_DIR}/bin/pip install requests 
                     ./${VENV_DIR}/bin/pip install dist/${WHEEL_NAME} --force-reinstall
                 """
             }
         }
 
-        stage('start service') {
-            steps {
+        stage('start service') 
+        {
+            steps 
+            {
                 echo 'Start Flask service in background on port ${FLASK_PORT}'
                 sh """
                     # Kill any existing service on that port
@@ -53,20 +59,22 @@ pipeline {
             }
         }
 
-        stage('REST JSON Tests') {
-            steps {
+        stage('REST JSON Tests') 
+        {
+            steps 
+            {
                 echo 'Running REST integration tests'
                 sh """
-                    ./${VENV_DIR}/bin/python -m pytest tests/requests_test_json.py
+                    ./${VENV_DIR}/bin/python tests/requests_test_json.py
                 """
             }
         }
-
-
     }
 
-    post {
-        always {
+    post 
+    {
+        always 
+        {
             echo 'Stopping Flask service'
             sh """
                 fuser -k ${FLASK_PORT}/tcp || true
