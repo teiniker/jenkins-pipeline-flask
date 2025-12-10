@@ -59,7 +59,7 @@ pipeline
             }
         }
 
-        stage('REST JSON Tests') 
+        stage('acceptance tests') 
         {
             steps 
             {

@@ -27,7 +27,7 @@ pipeline
                 }
             }
         }
-        stage('test') 
+        stage('unit test') 
         {
             steps 
             {
