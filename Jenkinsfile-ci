@@ -41,8 +41,7 @@ pipeline
         success 
         {
             echo 'Archive build artifacts'
-            archiveArtifacts artifacts: 'dist/*.whl', fingerprint: true
-            
+            archiveArtifacts artifacts: 'dist/*.whl', fingerprint: true    
         }
     }
 }
