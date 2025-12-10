@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "book_service"
+version = "0.1.0"
+description = "Flask book service"
+authors = [{ name = "homer", email = "homer@springfield.com" }]
+requires-python = ">=3.10"
+dependencies = [
+    "Flask>=2.3.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

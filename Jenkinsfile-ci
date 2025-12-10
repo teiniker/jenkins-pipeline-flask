@@ -1,0 +1,43 @@
+pipeline 
+{
+    agent any
+
+    stages 
+    {
+        stage('build') 
+        {
+            steps 
+            {
+                echo 'Build stage: setup Python virtual environment and build wheel'
+                dir('.') 
+                {
+                    sh """
+                        python -m venv .env
+                        source .venv/bin/activate
+                        pip install build
+
+                        # Build wheel from root
+                        python -m build --wheel --outdir dist
+                    """
+                }
+            }
+        }
+        stage('test') 
+        {
+            steps 
+            {
+                echo 'Test stage: Run unit tests...'                
+            }
+        }
+    }
+
+    post 
+    {
+        success 
+        {
+            echo 'Archive build artifacts'
+            archiveArtifacts artifacts: 'dist/*.whl', fingerprint: true
+            
+        }
+    }
+}

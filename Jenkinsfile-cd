@@ -1,0 +1,76 @@
+pipeline {
+    agent { label "raspi" }
+
+    environment {
+        VENV_DIR = "venv"
+        FLASK_APP_MODULE = "src.book_service.book_service"
+        FLASK_PORT = "9090"  
+        WHEEL_NAME = "book_service-0.1.0-py3-none-any.whl"
+    }
+
+    stages {
+
+        stage('download wheel') {
+            steps {
+                echo 'Copy wheel artifact from Jenkins build'
+        
+                copyArtifacts(
+                    projectName: 'flask-example',
+                    filter: 'dist/*.whl',
+                    target: '.',
+                    selector: [$class: 'StatusBuildSelector', stable: false]
+                )
+                sh 'ls -l dist'
+
+            }
+        }
+
+
+
+
+        stage('install wheel') {
+            steps {
+                echo 'Install wheel into virtual environment'
+                sh """
+                    python3 -m venv ${VENV_DIR}
+                    ./${VENV_DIR}/bin/pip install --upgrade pip requests pytest
+                    ./${VENV_DIR}/bin/pip install dist/${WHEEL_NAME} --force-reinstall
+                """
+            }
+        }
+
+        stage('start service') {
+            steps {
+                echo 'Start Flask service in background on port ${FLASK_PORT}'
+                sh """
+                    # Kill any existing service on that port
+                    fuser -k ${FLASK_PORT}/tcp || true
+
+                    # Start Flask service in background
+                    nohup ./${VENV_DIR}/bin/python -m ${FLASK_APP_MODULE} --port=${FLASK_PORT} &
+                    sleep 5
+                """
+            }
+        }
+
+        stage('REST JSON Tests') {
+            steps {
+                echo 'Running REST integration tests'
+                sh """
+                    ./${VENV_DIR}/bin/python -m pytest tests/requests_test_json.py
+                """
+            }
+        }
+
+
+    }
+
+    post {
+        always {
+            echo 'Stopping Flask service'
+            sh """
+                fuser -k ${FLASK_PORT}/tcp || true
+            """
+        }
+    }
+}
