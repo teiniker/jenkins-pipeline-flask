@@ -2,6 +2,11 @@ pipeline
 {
     agent any
 
+   environment 
+   {
+        VENV_DIR = ".venv"
+    }
+
     stages 
     {
         stage('build') 
@@ -12,12 +17,12 @@ pipeline
                 dir('.') 
                 {
                     sh """
-                        python -m venv .env
-                        source .venv/bin/activate
-                        pip install build
+                        # Create virtual environment and install build tool
+                        python -m venv ${VENV_DIR}
+                        ./${VENV_DIR}/bin/pip install build
 
                         # Build wheel from root
-                        python -m build --wheel --outdir dist
+                        ./${VENV_DIR}/bin/python -m build --wheel --outdir dist
                     """
                 }
             }
