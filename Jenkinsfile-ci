@@ -2,14 +2,21 @@ pipeline
 {
     agent any
 
-   environment 
-   {
+    environment 
+    {
         VENV_DIR = ".venv"
     }
 
     stages 
     {
-        stage('build') 
+        stage('unit test') 
+        {
+            steps 
+            {
+                echo 'Test stage: Run unit tests...'                
+            }
+        }
+        stage('package') 
         {
             steps 
             {
@@ -25,13 +32,6 @@ pipeline
                         ./${VENV_DIR}/bin/python -m build --wheel --outdir dist
                     """
                 }
-            }
-        }
-        stage('unit test') 
-        {
-            steps 
-            {
-                echo 'Test stage: Run unit tests...'                
             }
         }
     }
