@@ -24,7 +24,7 @@ pipeline
                     projectName: 'Flask CI Pipeline',
                     filter: 'dist/*.whl',
                     target: '.',
-                    selector: [$class: 'StatusBuildSelector', stable: false]
+                    selector: [$class: 'StatusBuildSelector', stable: true]
                 )
                 sh 'ls -l dist'
 

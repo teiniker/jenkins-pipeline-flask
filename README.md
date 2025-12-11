@@ -25,6 +25,10 @@ following stages:
 
 * `download wheel`: The wheel file stored in the Jenkins archive (Artifactory) 
     is downloaded. For this, the Jenkins **copyArtifacts** plugin must be installed.
+    - `StatusBuildSelector`: One of the selector types in the Copy Artifact plugin.
+        It selects the **most recent build that meets a certain status condition**.
+    - `stable: true`: It selects the most recent STABLE build of the job 
+        (Build result = SUCCESS, No test failures).
 
 * `install wheel`: The wheel file, and therefore the application under test, 
     is installed into a virtual environment. 
