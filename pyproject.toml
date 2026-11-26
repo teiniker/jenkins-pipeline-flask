@@ -12,6 +12,11 @@ dependencies = [
     "Flask>=2.3.0",
 ]
 
+# Command which starts the service (installed into the bin/ directory
+# of the virtual environment)
+[project.scripts]
+book-service = "book_service.book_service:main"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 

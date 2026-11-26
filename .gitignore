@@ -1,0 +1,7 @@
+.venv/
+dist/
+build/
+*.egg-info/
+__pycache__/
+service.log
+service.pid

@@ -1,3 +1,4 @@
+import argparse
 from http import HTTPStatus
 from flask import Flask, jsonify, request
 
@@ -18,7 +19,6 @@ def find_all():
 @app.route('/books/<int:oid>', methods = ['GET'])
 def find_by_id(oid):
     for item in table:
-        print(item)
         if item['id'] == oid:
             return jsonify(item), HTTPStatus.OK
     return jsonify({'message': 'book not found'}), HTTPStatus.NOT_FOUND
@@ -27,7 +27,6 @@ def find_by_id(oid):
 @app.route('/books', methods=['POST'])
 def insert():
     data = request.get_json()
-    print(data)
     oid = data.get('id')
     author = data.get('author')
     title = data.get('title')
@@ -45,10 +44,8 @@ def insert():
 @app.route('/books/<int:oid>', methods=['PUT'])
 def update(oid):
     for item in table:
-        print(item)
         if item['id'] == oid:
             data = request.get_json()
-            print(data)
             item.update({'author':data.get('author'), 'title':data.get('title'), 'isbn':data.get('isbn')})
             return jsonify(item), HTTPStatus.OK
     return jsonify({'message': 'book not found'}), HTTPStatus.NOT_FOUND
@@ -57,12 +54,19 @@ def update(oid):
 @app.route('/books/<int:oid>', methods=['DELETE'])
 def delete(oid):
     for item in table:
-        print(item)
         if item['id'] == oid:
             table.remove(item)
             return '', HTTPStatus.NO_CONTENT
     return jsonify({'message': 'book not found'}), HTTPStatus.NOT_FOUND
 
 
+def main():
+    parser = argparse.ArgumentParser(description='Book service')
+    parser.add_argument('--host', default='127.0.0.1')
+    parser.add_argument('--port', type=int, default=9090)
+    args = parser.parse_args()
+    app.run(host=args.host, port=args.port, debug=False)
+
+
 if __name__ == '__main__':
-    app.run(port=9090, debug=False)
+    main()

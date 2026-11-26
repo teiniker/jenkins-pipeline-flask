@@ -1,8 +1,9 @@
+import os
 import requests
 
-# Implement a class "BoookService" which encapsulates to communication 
-# with the book service REST API.
-# With this abstraction we can implement unit tests for the book service
+# The class "BookService" encapsulates the communication with the book
+# service REST API.
+# With this abstraction we can implement acceptance tests for the book service
 # without dealing with the low-level details of HTTP requests and responses.
 
 class Book:
@@ -13,11 +14,12 @@ class Book:
         self.title = title
         self.isbn = isbn
 
-class BoookService:
-    BASE_URL = 'http://localhost:9090/books'
+class BookService:
+    # The URL of the service under test can be set by the pipeline
+    BASE_URL = os.environ.get('BOOK_SERVICE_URL', 'http://localhost:9090/books')
 
     def find_by_id(self, book_id):
-        response = requests.get(f'{BoookService.BASE_URL}/{book_id}', timeout=5)
+        response = requests.get(f'{BookService.BASE_URL}/{book_id}', timeout=5)
         response.raise_for_status()
         data = response.json()
         return Book(
@@ -28,7 +30,7 @@ class BoookService:
         )
 
     def find_all(self):
-        response = requests.get(BoookService.BASE_URL, timeout=5)
+        response = requests.get(BookService.BASE_URL, timeout=5)
         response.raise_for_status()
         json_data = response.json()
         return [
@@ -48,7 +50,7 @@ class BoookService:
             "title": book.title,
             "isbn": book.isbn,
         }
-        response = requests.post(BoookService.BASE_URL, timeout=5, json=book_data)
+        response = requests.post(BookService.BASE_URL, timeout=5, json=book_data)
         response.raise_for_status()
 
     def update(self, book: Book):
@@ -58,9 +60,12 @@ class BoookService:
             "isbn": book.isbn,
         }
         response = requests.put(
-            f'{BoookService.BASE_URL}/{book.oid}',
+            f'{BookService.BASE_URL}/{book.oid}',
             timeout=5,
             json=book_data,
         )
         response.raise_for_status()
 
+    def delete(self, book_id):
+        response = requests.delete(f'{BookService.BASE_URL}/{book_id}', timeout=5)
+        response.raise_for_status()
