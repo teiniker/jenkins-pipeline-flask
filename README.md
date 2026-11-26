@@ -188,4 +188,5 @@ The plugin offers many **selectors**:
 * [Jenkins Pipeline Syntax: Triggers](https://www.jenkins.io/doc/book/pipeline/syntax/#triggers)
 * [Python Packaging: Entry Points](https://packaging.python.org/en/latest/specifications/entry-points/)
 
+
 _Nicoletta Kähling, Egon Teiniker, 2025-2026, GPL v3.0_
