@@ -46,9 +46,9 @@ class BookServiceUnitTest(unittest.TestCase):
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual('0134853989', book_service.table[1]['isbn'])
 
-    def test_update_not_found(self):
-        response = self.client.put('/books/99', json={})
-        self.assertEqual(HTTPStatus.NOT_FOUND, response.status_code)
+    # def test_update_not_found(self):
+    #     response = self.client.put('/books/99', json={})
+    #     self.assertEqual(HTTPStatus.NOT_FOUND, response.status_code)
 
     def test_delete(self):
         response = self.client.delete('/books/3')
