@@ -15,6 +15,8 @@ We use a combination of a CI and a CD pipeline in Jenkins:
 +--------------------------------+       +----------------------------------+
 ```
 
+
+
 The wheel file is the **Release Candidate**. It is built **once** by the
 CI pipeline, and the CD pipeline tests exactly this file.
 
